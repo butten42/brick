@@ -24,6 +24,7 @@ var brickOffsetLeft = 30;
 var score = 0,
     lives = 3,
     level = 1,
+    count = 0,
     speed = 1;
 // 添加音频素材
 var bgm = new Audio('resources/Tetris Theme - Korobeiniki [Piano Tutorial] (Synthesia).mp3');
@@ -146,14 +147,25 @@ function drawPaddle() {
 }
 
 function reset() {
-    for ( c = 0; c < brickColumnCount; c++) {
-        for ( r = 0; r < brickRowCount; r++) {
-            var d = bricks[c][r];
-            if (c%2==0&&r%2==1) {d.status==2}
-                else{d.status==1}
+
+for (var c = 0; c < brickColumnCount; c++) {
+    bricks[c] = [];
+    for (var r = 0; r < brickRowCount; r++) {
+        if (c % 2 == 0 && r %2== 1) {
+            bricks[c][r] = {
+                x: 0,
+                y: 0,
+                status: 2
+            }
+        } else {
+            bricks[c][r] = {
+                x: 0,
+                y: 0,
+                status: 1
+            }
         }
     }
-}
+}}
 
 function collisionDetection() {
     for (var c = 0; c < brickColumnCount; c++) {
@@ -169,7 +181,8 @@ function collisionDetection() {
                     dy = -dy;
                     b.status--;
                     score++;
-                    if (score == brickRowCount * brickColumnCount * level) {
+
+                    if (score == (brickRowCount * brickColumnCount+6) * level) {
                         alert("YOU WIN");
                         reset();
                         draw();
