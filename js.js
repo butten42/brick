@@ -6,7 +6,7 @@ var idy = 1;
 var iy = canvas.height - 30,
     dx = 2,
     dy = -2,
-    ballRadius = 10,
+    ballRadius = 5,
     paddleHeight = 10,
     paddleWidth = 75,
     paddleX = (canvas.width - paddleWidth) / 2,
@@ -15,11 +15,11 @@ var iy = canvas.height - 30,
     gamePause = false,
     leftPressed = false;
 
-var brickRowCount = 4;
-var brickColumnCount = 5;
-var brickWidth = 75;
+var brickRowCount = 5;
+var brickColumnCount = 6;
+var brickWidth = 50;
 var brickHeight = 20;
-var brickPadding = 10;
+var brickPadding = 20;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 
@@ -62,7 +62,7 @@ for (var c = 0; c < brickColumnCount; c++) {
     }
 }
 var golds = [];
-for (var c = 0; c < 2; c++) {
+for (var c = 0; c <brickColumnCount; c++) {
     golds[c] = {
         x: 0,
         y: 0
@@ -119,9 +119,9 @@ function drawBricks() {
 }
 
 function drawGolds() {
-    for (var c = 0; c < 2; c++) {
+    for (var c = 0; c <brickColumnCount; c++) {
         var goldX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-        var goldY = (4 * (brickHeight + brickPadding)) + brickOffsetTop;
+        var goldY = (5 * (brickHeight + brickPadding)) + brickOffsetTop;
         golds[c].x = goldX;
         golds[c].y = goldY;
         ctx.beginPath();
@@ -163,7 +163,7 @@ function mouseMoveHandler(e) {
 function drawBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = 'silver';
     ctx.fill();
     ctx.closePath();
 }
@@ -177,7 +177,8 @@ function drawPaddle() {
 }
 
 function reset() {
-
+    x = canvas.width / 2;
+    y = canvas.height - 30;
     for (var c = 0; c < brickColumnCount; c++) {
         bricks[c] = [];
         for (var r = 0; r < brickRowCount; r++) {
@@ -224,7 +225,7 @@ function collisionDetection() {
 
         }
     }
-    for (var g = 0; g < 2; g++) {
+    for (var g = 0; g < brickColumnCount; g++) {
         var d = golds[g];
         if (x > d.x && x < d.x + brickWidth && y > d.y && y < d.y + brickHeight) {
             dy = -dy
@@ -271,7 +272,7 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     gameStart = true;
     drawBall(), drawPaddle(), drawBricks();
-    collisionDetection(), drawScore(), drawLives(), drawLevels(), drawMove(), drawGolds();
+    collisionDetection(), drawScore(), drawLives(), drawLevels(), drawGolds(),drawMove();
 
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 7;

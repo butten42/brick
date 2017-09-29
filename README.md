@@ -32,6 +32,14 @@ I need to:
 - how to level up
 	- a sample is just count the total scores.
 - design more **levels**
+### hard balls
+#### how to make the ball reset after new turns
+you see I was reset the main draw() function after it win I think everything should be reset just like first time game start but no it dosen;t the ball remain in the last position of last level.
+I need to reset it's position at reset() function use it's coordinate  
+**tips**: use the drawball() won't help
+
+### log
+2017/09/29  Reform the game with new brick/ball style new control adding sounds resource change the game over cartoon new game design
 
 ___
 **tips**  
