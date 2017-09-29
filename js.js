@@ -11,6 +11,7 @@ var iy = canvas.height - 30,
     paddleWidth = 75,
     paddleX = (canvas.width - paddleWidth) / 2,
     rightPressed = false,
+    gameStart=false,
     leftPressed = false;
 
 var brickRowCount = 4;
@@ -65,6 +66,13 @@ function drawLives() {
     ctx.font = '16px Arial';
     ctx.fillStyle = "#0095DD";
     ctx.fillText('Lives: ' + lives, canvas.width - 65, 20);
+}
+function gameOver() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '22px Arial';
+    ctx.fillStyle = "#9500DD";
+    ctx.fillText('GAME OVER!!! PRESS ESC TO RESTART!!!', x, canvas.height/2);
+    document.removeEventListener('mousemove', mouseMoveHandler);
 }
 
 function drawLevels() {
@@ -135,7 +143,6 @@ function drawBall() {
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
-    pause.click();
 }
 
 function drawPaddle() {
@@ -203,6 +210,7 @@ function drawScore() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    gameStart=true;
     drawBall(), drawPaddle(), drawBricks();
     collisionDetection(), drawScore(), drawLives(), drawLevels();
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
@@ -218,8 +226,7 @@ function draw() {
             hitPaddleBeep.play();
         } else {
             if (!lives) {
-                alert("GAME OVER");
-                document.location.reload();
+                gameOver()
             } else {
                 lives--;
                 x = canvas.width / 2;
@@ -239,13 +246,13 @@ function draw() {
 
     x += dx * speed;
     y += dy * speed;
-    requestAnimationFrame(draw);
+    animat=requestAnimationFrame(draw);
 }
 
 //添加按键控制以及开始画面
 document.addEventListener('keydown', function (e) {
-    if (e.keyCode == 13) {
-        draw();
+    if (e.keyCode == 13 && gameStart==false) {
+        animat=requestAnimationFrame(draw);
         pause.click();
     }
 });
@@ -254,7 +261,16 @@ document.addEventListener('keydown', function (e) {
         document.location.reload();
     }
 });
-
+document.addEventListener('keydown', function (e) {
+    if (e.keyCode == 69) {
+        speed+=5;
+    }
+});
+document.addEventListener('keydown', function (e) {
+    if (e.keyCode == 80|| lives==0) {
+        window.cancelAnimationFrame(animat);
+    }
+});
 
 //添加可爱小猫
 function initdraw() {
