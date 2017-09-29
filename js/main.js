@@ -28,11 +28,11 @@ var score = 0,
     level = 1,
     speed = 1;
 // 添加音频素材
-var bgm = new Audio('resources/Tetris Theme - Korobeiniki [Piano Tutorial] (Synthesia).mp3');
-var ballHitBeep = new Audio('resources/ball-origin-beep.ogg');
-var hitWallBeep = new Audio('resources/wall-beep.ogg');
-var hitPaddleBeep = new Audio('resources/paddle-beep.ogg');
-var blueBeep = new Audio('resources/blue-beep.ogg');
+var bgm = new Audio('./resources/Tetris Theme - Korobeiniki [Piano Tutorial] (Synthesia).mp3');
+var ballHitBeep = new Audio('./resources/ball-origin-beep.ogg');
+var hitWallBeep = new Audio('./resources/wall-beep.ogg');
+var hitPaddleBeep = new Audio('./resources/paddle-beep.ogg');
+var blueBeep = new Audio('./resources/blue-beep.ogg');
 // 控制音频
 var pause = document.getElementById('pause')
 window.onload = function () {
@@ -323,7 +323,7 @@ function initdraw() {
     ctx.fillStyle = "#0095DD";
     ctx.fillText('Cats and balls', 140, 200);
     var img = new Image();
-    img.src = 'resources/logo.gif';
+    img.src = './resources/logo.gif';
     ctx.drawImage(img, x, iy);
 
     if (iy + dy > canvas.height + 15) {

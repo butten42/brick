@@ -43,4 +43,5 @@ I need to reset it's position at reset() function use it's coordinate
 
 ___
 **tips**  
-` git push --set-upstream origin master`
+` git push --set-upstream origin master`  
+`window.cancelAnimationFrame(initAnimat);`
