@@ -12,6 +12,7 @@ var iy = canvas.height - 30,
     paddleX = (canvas.width - paddleWidth) / 2,
     rightPressed = false,
     gameStart=false,
+    gamePause=false,
     leftPressed = false;
 
 var brickRowCount = 4;
@@ -25,7 +26,6 @@ var brickOffsetLeft = 30;
 var score = 0,
     lives = 3,
     level = 1,
-    count = 0,
     speed = 1;
 // 添加音频素材
 var bgm = new Audio('resources/Tetris Theme - Korobeiniki [Piano Tutorial] (Synthesia).mp3');
@@ -68,10 +68,11 @@ function drawLives() {
     ctx.fillText('Lives: ' + lives, canvas.width - 65, 20);
 }
 function gameOver() {
+    window.clearInterval(animat);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.font = '22px Arial';
     ctx.fillStyle = "#9500DD";
-    ctx.fillText('GAME OVER!!! PRESS ESC TO RESTART!!!', x, canvas.height/2);
+    ctx.fillText('GAME OVER!!! PRESS ESC TO RESTART!!!', 20, canvas.height/2);
     document.removeEventListener('mousemove', mouseMoveHandler);
 }
 
@@ -207,12 +208,7 @@ function drawScore() {
     ctx.fillStyle = "orange";
     ctx.fillText("Score: " + score, 8, 20);
 }
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    gameStart=true;
-    drawBall(), drawPaddle(), drawBricks();
-    collisionDetection(), drawScore(), drawLives(), drawLevels();
+function drawMove(){
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
         dx = -dx;
         hitWallBeep.play();
@@ -238,6 +234,13 @@ function draw() {
         }
 
     }
+}
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    gameStart=true;
+    drawBall(), drawPaddle(), drawBricks();
+    collisionDetection(), drawScore(), drawLives(), drawLevels(),drawMove();
+
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 7;
     } else if (leftPressed && paddleX > 0) {
@@ -246,13 +249,13 @@ function draw() {
 
     x += dx * speed;
     y += dy * speed;
-    animat=requestAnimationFrame(draw);
-}
 
+}
 //添加按键控制以及开始画面
 document.addEventListener('keydown', function (e) {
     if (e.keyCode == 13 && gameStart==false) {
-        animat=requestAnimationFrame(draw);
+        window.cancelAnimationFrame(initAnimat);
+        animat=setInterval(draw,10)
         pause.click();
     }
 });
@@ -263,12 +266,20 @@ document.addEventListener('keydown', function (e) {
 });
 document.addEventListener('keydown', function (e) {
     if (e.keyCode == 69) {
+        lives--;
         speed+=5;
     }
 });
 document.addEventListener('keydown', function (e) {
-    if (e.keyCode == 80|| lives==0) {
-        window.cancelAnimationFrame(animat);
+    if (e.keyCode == 80) {
+        if (gamePause==false) {
+            window.clearInterval(animat);
+            gamePause=true;
+        }else{
+            animat=setInterval(draw,10)
+            gamePause=false;
+        }
+
     }
 });
 
@@ -289,6 +300,6 @@ function initdraw() {
         idy = -idy
     }
     iy += idy;
-    requestAnimationFrame(initdraw);
+    initAnimat=requestAnimationFrame(initdraw);
 }
 initdraw()
